@@ -1,7 +1,2 @@
 config:
-  categoriesTable: com-mongods-categories-dev
-  flavoursTable: com-mongods-flavours-dev
-  conditionsTable: com-mongods-conditions-dev
-  symptomsTables: com-mongods-symptoms-dev
-  tagsTable: com-mongods-tags-dev
-  strainsTable: com-mongods-strains-dev
+  categoriesTable: com-mongods-categories-prod
