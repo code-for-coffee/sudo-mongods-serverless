@@ -30,7 +30,7 @@ export async function createCategory (event, context, callback) {
   });
 }
 
-export async function listCategory (event, context, callback) {
+export async function listCategories (event, context, callback) {
   const params = {
     TableName: categoriesTable
   };
