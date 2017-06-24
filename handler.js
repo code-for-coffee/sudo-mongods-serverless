@@ -5,7 +5,7 @@ import { success, failure } from './utils/responseUtils';
 AWS.config.update({ region: process.env.REGION });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const categoriesTable = process.env.CONTACTS_TABLE;
+const categoriesTable = process.env.CATEGORIES_TABLE;
 
 export async function createCategory (event, context, callback) {
   const requestBody = JSON.parse(event.body);
