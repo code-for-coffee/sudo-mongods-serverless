@@ -73,10 +73,55 @@ functions:
           path: categories/{id}
           method: delete
           cors: true
+  createFlavour:
+    handler: handler.createFlavour
+    environment:
+      FLAVOURS_TABLE: ${self:custom.config.flavoursTable}
+    events:
+      - http:
+          path: flavours
+          method: post
+          cors: true
+  listFlavours:
+    handler: handler.listFlavours
+    environment:
+      FLAVOURS_TABLE: ${self:custom.config.flavoursTable}
+    events:
+      - http:
+          path: flavours
+          method: get
+          cors: true
+  getFlavour:
+    handler: handler.getFlavour
+    environment:
+      FLAVOURS_TABLE: ${self:custom.config.flavoursTable}
+    events:
+      - http:
+          path: flavours/{id}
+          method: get
+          cors: true
+  updateFlavour:
+    handler: handler.updateFlavour
+    environment:
+      FLAVOURS_TABLE: ${self:custom.config.flavoursTable}
+    events:
+      - http:
+          path: flavours/{id}
+          method: put
+          cors: true
+  deleteFlavour:
+    handler: handler.deleteFlavour
+    environment:
+      FLAVOURS_TABLE: ${self:custom.config.flavoursTable}
+    events:
+      - http:
+          path: flavours/{id}
+          method: delete
+          cors: true
 
 resources:
   Resources:
-    ContactsDynamoDbTable:
+    CategoriesDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -92,3 +137,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.config.categoriesTable}
+  FlavoursDynamoDbTable:
+        Type: 'AWS::DynamoDB::Table'
+        DeletionPolicy: Retain
+        Properties:
+          AttributeDefinitions:
+            -
+              AttributeName: id
+              AttributeType: S
+          KeySchema:
+            -
+              AttributeName: id
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          TableName: ${self:custom.config.flavoursTable}
