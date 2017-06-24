@@ -5,16 +5,26 @@ import { success, failure } from './utils/responseUtils';
 AWS.config.update({ region: process.env.REGION });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const categoriesTable = process.env.CATEGORIES_TABLE;
+const productsTable = process.env.PRODUCTS_TABLE;
 
-export async function createCategory (event, context, callback) {
+/**
+ * Creates a product.
+ * @param event
+ * @param context
+ * @param callback
+ * @returns {Promise.<void>}
+ */
+export async function createProduct (event, context, callback) {
   const requestBody = JSON.parse(event.body);
 
   const params = {
-    TableName: categoriesTable,
+    TableName: productsTable,
     Item: {
       id: uuid.v1(),
       name: requestBody.name,
+      tags: requestBody.tags,
+      flavours: requestBody.flavours,
+      percentageRange: requestBody.percentageRange,
       createdAt: new Date().getTime(),
     },
   };
@@ -30,9 +40,16 @@ export async function createCategory (event, context, callback) {
   });
 }
 
-export async function listCategories (event, context, callback) {
+/**
+ * Fetch a list of products.
+ * @param event
+ * @param context
+ * @param callback
+ * @returns {Promise.<void>}
+ */
+export async function listProducts (event, context, callback) {
   const params = {
-    TableName: categoriesTable
+    TableName: productsTable
   };
 
   dynamoDb.scan(params, (err, data) => {
@@ -46,9 +63,16 @@ export async function listCategories (event, context, callback) {
   });
 }
 
-export async function getCategory (event, context, callback) {
+/**
+ * Get a product by uuid.
+ * @param event
+ * @param context
+ * @param callback
+ * @returns {Promise.<void>}
+ */
+export async function getProduct (event, context, callback) {
   const params = {
-    TableName: categoriesTable,
+    TableName: productsTable,
     Key: {
       id: event.pathParameters.id
     }
@@ -65,19 +89,29 @@ export async function getCategory (event, context, callback) {
   });
 }
 
-export async function updateCategory (event, context, callback) {
+/**
+ * Update product by uuid.
+ * @param event
+ * @param context
+ * @param callback
+ * @returns {Promise.<void>}
+ */
+export async function updateProduct (event, context, callback) {
   const requestBody = JSON.parse(event.body);
 
   const params = {
-    TableName: categoriesTable,
+    TableName: productsTable,
     Key: {
       id: event.pathParameters.id,
     },
     ExpressionAttributeValues: {
       ':name': requestBody.name,
+      ':tags': requestBody.tags,
+      ':flavours': requestBody.flavours,
+      ':percentageRange': requestBody.percentageRange,
       ':updatedAt': new Date().getTime(),
     },
-    UpdateExpression: 'SET name = :name, updatedAt = :updatedAt',
+    UpdateExpression: 'SET name = :name, tags = :tags, flavours = :flavours, percentageRange = :percentageRange, updatedAt = :updatedAt',
     ReturnVAlues: 'ALL_NEW'
   };
 
@@ -92,9 +126,16 @@ export async function updateCategory (event, context, callback) {
   });
 }
 
-export async function deleteCategory (event, context, callback) {
+/**
+ * Delete product by uuid.
+ * @param event
+ * @param context
+ * @param callback
+ * @returns {Promise.<void>}
+ */
+export async function deleteProduct (event, context, callback) {
   const params = {
-    TableName: categoriesTable,
+    TableName: productsTable,
     Key: {
       id: event.pathParameters.id
     }

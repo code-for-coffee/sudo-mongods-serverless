@@ -1,4 +1,4 @@
-service: rest-api
+service: sudo-mongods-products-rest-api
 
 frameworkVersion: ">=1.8.0 <2.0.0"
 
@@ -13,7 +13,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
-    CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+    PRODUCTS_TABLE: ${self:custom.config.productsTable}
     SERVERLESS_REGION: ${opt:region, self:provider.region}
   iamRoleStatements:
     - Effect: Allow
@@ -25,58 +25,58 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: arn:aws:dynamodb:${self:provider.environment.SERVERLESS_REGION}:*:table/${self:provider.environment.CATEGORIES_TABLE}
+      Resource: arn:aws:dynamodb:${self:provider.environment.SERVERLESS_REGION}:*:table/${self:provider.environment.PRODUCTS_TABLE}
 
 functions:
   create:
-    handler: handler.createCategory
+    handler: handler.createProduct
     environment:
-      CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+      PRODUCTS_TABLE: ${self:custom.config.productsTable}
     events:
       - http:
-          path: categories
+          path: products
           method: post
           cors: true
   list:
-    handler: handler.listCategories
+    handler: handler.listProducts
     environment:
-      CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+      PRODUCTS_TABLE: ${self:custom.config.productsTable}
     events:
       - http:
-          path: categories
+          path: products
           method: get
           cors: true
   get:
-    handler: handler.getCategory
+    handler: handler.getProduct
     environment:
-      CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+      PRODUCTS_TABLE: ${self:custom.config.productsTable}
     events:
       - http:
-          path: categories/{id}
+          path: products/{id}
           method: get
           cors: true
   update:
-    handler: handler.updateCategory
+    handler: handler.updateProduct
     environment:
-      CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+      PRODUCTS_TABLE: ${self:custom.config.productsTable}
     events:
       - http:
-          path: categories/{id}
+          path: products/{id}
           method: put
           cors: true
   delete:
-    handler: handler.deleteCategory
+    handler: handler.deleteProduct
     environment:
-      CATEGORIES_TABLE: ${self:custom.config.categoriesTable}
+      PRODUCTS_TABLE: ${self:custom.config.productsTable}
     events:
       - http:
-          path: categories/{id}
+          path: products/{id}
           method: delete
           cors: true
 
 resources:
   Resources:
-    CategoriesDynamoDbTable:
+    ProductsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -91,4 +91,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.config.categoriesTable}
+        TableName: ${self:custom.config.productsTable}

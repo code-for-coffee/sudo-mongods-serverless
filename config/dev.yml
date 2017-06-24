@@ -1,2 +1,2 @@
 config:
-  categoriesTable: com-mongods-categories-prod
+  productsTable: com-mongods-products-prod
